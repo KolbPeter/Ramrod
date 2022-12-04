@@ -1,0 +1,24 @@
+﻿@if (@IsEnabled)
+{
+    <label class="text-input-label">
+        @LabelText
+    </label>
+    <input type="text" class="select-form text-input" @onchange="ChangeCallback">
+}
+
+@code {
+    [Parameter]
+    public bool IsEnabled { get; set; }
+
+    [Parameter]
+    public string LabelText { get; set; }
+
+    [Parameter]
+    public string? InputString { get; set; }
+
+    [Parameter]
+    public EventCallback<string> InputStringChanged { get; set; }
+
+    private void ChangeCallback(ChangeEventArgs e) =>
+        InputStringChanged.InvokeAsync(e.Value?.ToString() ?? string.Empty).Wait();
+}

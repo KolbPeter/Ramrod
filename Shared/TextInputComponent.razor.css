@@ -1,0 +1,17 @@
+﻿.select-form {
+    background-color: #001500;
+    color: darkgreen;
+    border: none;
+    border-bottom: 1px solid darkgreen;
+    padding: 0.4rem;
+    outline: 0px;
+}
+
+.text-input {
+    min-width: 50%;
+}
+
+.text-input-label {
+    margin-right: 0.3rem;
+}
+

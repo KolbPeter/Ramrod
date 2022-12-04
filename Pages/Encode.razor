@@ -1,0 +1,71 @@
+﻿@page "/Encode"
+
+<PageTitle>Ramcor</PageTitle>
+
+@using Ramcor.Data
+@using System.Text.RegularExpressions
+@using Blazored.LocalStorage
+@using Ramcor.Data.Models
+@inject RamcorService RamcorService
+@inject ILocalStorageService LocalStorage
+
+<div class="left">
+
+    <h1>Ramcor kódoló</h1>
+
+    <CodeComponent Code="@RamcorService.Code"></CodeComponent>
+    <TextInputComponent @bind-InputString="NewMessage" IsEnabled="@IsInputEnabled" LabelText="Közlemény:" /><br /><br />
+    @if (PreviousMessage != null)
+    {
+        <PreviousMessageComponent Message=@PreviousMessage Text="Kódolt üzenet"></PreviousMessageComponent>
+    }
+</div>
+
+<div class="right">
+    <CodedMessageComponent Message="@_newMessage" CodedMessage="@NewCodedMessage" PhoneticMessage="@NewPhoneticMessage"></CodedMessageComponent>
+</div>
+
+@code {
+    private const string MessageStorage = "Message";
+    
+    private string? _newMessage;
+    public string? NewMessage
+    {
+        get => _newMessage;
+        set => OnNewMessage(value);
+    }
+
+    private string? NewCodedMessage { get; set; }
+    private string[]? NewPhoneticMessage { get; set; }
+    private Message? PreviousMessage { get; set; }
+
+    private bool IsInputEnabled => !string.IsNullOrEmpty(RamcorService.Code.CodeWord);
+
+    private void OnNewMessage(string? message)
+    {
+        if (string.IsNullOrEmpty(message) || !Regex.IsMatch(message, @"^[a-zA-Z0-9]+$"))
+        {
+            return;
+        }
+
+        NewCodedMessage = string.Concat(RamcorService.Encode(message).Result);
+        NewPhoneticMessage = RamcorService.EncodeToPhonetic(message).Result.ToArray();
+        _newMessage = message;
+
+        PreviousMessage = new Message
+        {
+            Codeword = RamcorService.Code.CodeWord,
+            Text = message,
+            ProcessedText = NewCodedMessage
+        };
+        LocalStorage.SetItemAsync(MessageStorage, PreviousMessage);
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PreviousMessage = await LocalStorage.GetItemAsync<Message>(MessageStorage);
+        await base.OnInitializedAsync();
+    }
+}

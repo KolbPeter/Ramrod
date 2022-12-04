@@ -1,0 +1,8 @@
+﻿td {
+    border: 1px solid darkgreen;
+    border-collapse: collapse;
+    width: 1.2rem;
+    text-align: center;
+    color: green;
+    font-weight: bolder;
+}

@@ -1,0 +1,58 @@
+﻿@page "/"
+
+<PageTitle>Ramcor</PageTitle>
+
+@using Ramcor.Data
+@using Ramcor.Data.Models
+@using Ramcor.Data.Validators
+@using Blazored.LocalStorage
+@inject RamcorService RamcorService
+@inject ILocalStorageService LocalStorage
+
+<h1>Ramcor kód</h1>
+
+<div>
+    <TextInputComponent @bind-InputString="NewCode" IsEnabled="@true" LabelText="Új kód:" />
+
+    @if (ValidationResult != null)
+    {
+        <table>
+            @foreach (var message in ValidationResult?.Errors ?? Array.Empty<string>())
+            {
+                <tr><td class="bad_td">@message</td></tr>
+            }
+        </table>
+    }
+</div>
+<CodeComponent Code="@RamcorService.Code"></CodeComponent>
+
+@code {
+    private const string CodeWordStorage = "CodeWord";
+    private ValidationResult? ValidationResult { get; set; }
+
+    private string? _newCode;
+    public string? NewCode
+    {
+        get => _newCode;
+        set => OnCodeChange(value);
+    }
+
+    private void OnCodeChange(string? newCode)
+    {
+        var input = string.IsNullOrEmpty(newCode) ? string.Empty : newCode;
+        ValidationResult = RamcorService.SetCode(input.ToUpper());
+        
+        if (!ValidationResult.IsValid) return;
+        
+        RamcorService.Code = new RamcorCode { CodeWord = input };
+        _newCode = input;
+        LocalStorage.SetItemAsync(CodeWordStorage, input);
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        OnCodeChange(await LocalStorage.GetItemAsync<string>(CodeWordStorage));
+        await base.OnInitializedAsync();
+    }
+}

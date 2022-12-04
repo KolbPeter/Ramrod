@@ -1,0 +1,15 @@
+﻿.bad_td {
+    color: blue;
+    font-weight: bold;
+}
+
+td.good_td {
+    border: 1px solid darkgreen;
+    border-collapse: collapse;
+    width: 30px;
+    text-align: center;
+    color: green;
+    font-weight: bolder;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}
