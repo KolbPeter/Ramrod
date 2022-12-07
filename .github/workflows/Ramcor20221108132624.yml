@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - development
+    - master
 env:
   AZURE_WEBAPP_NAME: Ramcor20221108132624
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.Ramcor20221108132624_1330 }}
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.Ramcor20221108132624_5bd5 }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: .
