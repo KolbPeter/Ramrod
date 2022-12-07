@@ -1,0 +1,30 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Data.TransCoders
+
+@if (Message.IsValid)
+{
+    <table>
+        @foreach (var tuple in GetAsTupleArray(Message))
+        {
+            <tr>
+                <td>@tuple.Char</td>
+                <td>@tuple.ProcessedChar</td>
+                <td>@tuple.Phonetic</td>
+            </tr>
+        }
+    </table>
+}
+@code {
+    [Parameter]
+    public Message Message { get; set; }
+
+    private IEnumerable<(char Char, char ProcessedChar, string Phonetic)> GetAsTupleArray(Message message)
+    {
+        var charArray = message.Text.ToCharArray();
+        var processedArray = message.ProcessedText.ToCharArray();
+        var phoneticArray = message.ProcessedText.ToPhonetic().Result.ToArray();
+        return Enumerable
+            .Range(0, charArray.Length)
+            .Select(x => (charArray[x], processedArray[x], phoneticArray[x]));
+    }
+}

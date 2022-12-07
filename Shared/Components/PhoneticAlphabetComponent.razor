@@ -1,0 +1,14 @@
+﻿@using Ramcor.Data.Models
+
+<fieldset>
+    <legend>Fonetikus ABC</legend>
+    <table>
+        @foreach (var word in Enum.GetNames(typeof(PhoneticAlphabet)))
+        {
+            <tr>
+                <td>@word.First()</td>
+                <td>@word</td>
+            </tr>
+        }
+    </table>
+</fieldset>

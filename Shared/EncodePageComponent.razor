@@ -1,0 +1,65 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Shared.Components
+@using Ramcor.Shared.Forms
+@using Microsoft.AspNetCore.Components
+@using Ramcor.Data
+@inject RamcorService RamcorService
+
+<fieldset>
+    <legend>Dekódolás</legend>
+    <EditForm Model="@MessageToDecode">
+        <MessageToDecodeForm @bind-Value="@MessageToDecode" TValue="@MessageToDecode" />
+    </EditForm>
+
+    @if (NewDecodedMessage != null && NewDecodedMessage.IsValid)
+    {
+        <fieldset>
+            <legend>Dekódolt üzenet</legend>
+            <label>Közlemény: @NewDecodedMessage.Text</label>
+            <br />
+            <label>Dekódolt közlemény: @NewDecodedMessage.ProcessedText</label>
+            <br />
+            <label>Használt kódszó: @NewDecodedMessage.Codeword</label>
+            <br />
+        </fieldset>
+    }
+</fieldset>
+
+@code {
+    private MessageToDecode _messageToDecode;
+    private MessageToDecode MessageToDecode
+    {
+        get => _messageToDecode;
+        set => OnMessageToDecodeChanged(value);
+    }
+    private Message NewDecodedMessage { get; set; }
+
+    private async void OnMessageToDecodeChanged(MessageToDecode message)
+    {
+        var decodedMessage = await RamcorService.Decode(message.Message);
+        NewDecodedMessage = new Message()
+        {
+            Codeword = RamcorService.Code.CodeWord,
+            Text = message.Message,
+            ProcessedText = decodedMessage
+        };
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _messageToDecode = new MessageToDecode { Message = string.Empty };
+        NewDecodedMessage = new Message { Codeword = string.Empty, ProcessedText = string.Empty, Text = string.Empty };
+
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _messageToDecode = new MessageToDecode { Message = string.Empty };
+        NewDecodedMessage = new Message { Codeword = string.Empty, ProcessedText = string.Empty, Text = string.Empty };
+
+        await base.OnInitializedAsync();
+    }
+}
