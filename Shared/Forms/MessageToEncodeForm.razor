@@ -1,0 +1,35 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Data.Components
+@inherits GenericForm<MessageToEncode>
+
+<EditForm EditContext="@_editContext"
+          OnValidSubmit="() => OnValidSubmit(TValue)"
+          OnInvalidSubmit="() => OnInvalidSubmit(BackupValue)">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>    
+    <InputText class="text-input" @bind-Value="@TValue.Message" placeholder="Közlemény:" />
+</EditForm>
+
+@code {
+    protected override void OnValidSubmit(MessageToEncode message)
+    {
+        BackupValue = new MessageToEncode{ Message = message.Message};
+        InvokeValueChangedCallback(message);
+    }
+
+    protected override void OnInvalidSubmit(MessageToEncode message)
+    {
+        TValue = new MessageToEncode{ Message = BackupValue.Message };
+        ResetContext(5);
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _editContext = new(TValue);
+        BackupValue = new MessageToEncode{ Message = TValue.Message };
+
+        return base.OnInitializedAsync();
+    }
+
+    public override MessageToEncode ResetValue() => new() { Message = string.Empty };
+}

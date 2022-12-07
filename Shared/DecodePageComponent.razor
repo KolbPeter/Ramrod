@@ -1,0 +1,68 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Shared.Components
+@using Ramcor.Shared.Forms
+@using Microsoft.AspNetCore.Components
+@using Ramcor.Data
+@inject RamcorService RamcorService
+
+<fieldset>
+    <legend>Kódolás</legend>
+    <EditForm Model="@MessageToEncode">
+        <MessageToEncodeForm @bind-Value="@MessageToEncode" TValue="@MessageToEncode" />
+    </EditForm>
+
+    @if (NewEncodedMessage != null && NewEncodedMessage.IsValid)
+    {
+        <fieldset>
+            <legend>Kódolt üzenet</legend>
+            <label>Közlemény: @NewEncodedMessage.Text</label>
+            <br />
+            <label>Kódolt közlemény: @NewEncodedMessage.ProcessedText</label>
+            <br />
+            <label>Használt kódszó: @NewEncodedMessage.Codeword</label>
+            <br />
+            <PhoneticMessageComponent Message="@NewEncodedMessage"></PhoneticMessageComponent>
+        </fieldset>
+    }
+</fieldset>
+
+@code {
+    private MessageToEncode _messageToEncode;
+
+    private MessageToEncode MessageToEncode
+    {
+        get => _messageToEncode;
+        set => OnMessageToEncodeChanged(value);
+    }
+
+    private Message NewEncodedMessage { get; set; }
+
+    private async void OnMessageToEncodeChanged(MessageToEncode message)
+    {
+        var encodedMessage = await RamcorService.Encode(message.Message);
+        NewEncodedMessage = new Message()
+        {
+            Codeword = RamcorService.Code.CodeWord,
+            Text = message.Message,
+            ProcessedText = encodedMessage
+        };
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _messageToEncode = new MessageToEncode { Message = string.Empty };
+        NewEncodedMessage = new Message { Codeword = string.Empty, ProcessedText = string.Empty, Text = string.Empty };
+
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _messageToEncode = new MessageToEncode { Message = string.Empty };
+        NewEncodedMessage = new Message { Codeword = string.Empty, ProcessedText = string.Empty, Text = string.Empty };
+
+        await base.OnInitializedAsync();
+    }
+}

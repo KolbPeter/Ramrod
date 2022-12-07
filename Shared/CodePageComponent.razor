@@ -1,0 +1,51 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Shared.Components
+@using Ramcor.Shared.Forms
+@using Microsoft.AspNetCore.Components
+@using Ramcor.Data
+@using Blazored.LocalStorage
+@inject RamcorService RamcorService
+@inject ILocalStorageService LocalStorage
+
+<fieldset>
+    <legend>Kód</legend>
+    <EditForm Model="@RamcorCode">
+        <CodeForm @bind-Value="@RamcorCode" TValue="@RamcorCode" />
+    </EditForm>
+    <CodeComponent Code="@RamcorService.Code"></CodeComponent>
+</fieldset>
+
+
+@code {
+    private const string CodeWordStorage = "CodeWord";
+
+    private RamcorCode RamcorCode
+    {
+        get => new (){CodeWord = RamcorService.Code.CodeWord};
+        set => OnCodeChange(value);
+    }
+
+    private void OnCodeChange(RamcorCode newCode)
+    {
+        RamcorService.Code = newCode;
+        LocalStorage.SetItemAsync(CodeWordStorage, newCode.CodeWord);
+        StateHasChanged();
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        var previousCodeWord = await LocalStorage.GetItemAsync<string>(CodeWordStorage);
+        OnCodeChange(new RamcorCode { CodeWord = previousCodeWord ?? string.Empty });
+
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var previousCodeWord = await LocalStorage.GetItemAsync<string>(CodeWordStorage);
+        OnCodeChange(new RamcorCode { CodeWord = previousCodeWord ?? string.Empty });
+
+        await base.OnInitializedAsync();
+    }
+
+}

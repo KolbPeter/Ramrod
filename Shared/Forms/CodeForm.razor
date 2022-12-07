@@ -1,0 +1,36 @@
+﻿@using Ramcor.Data.Models
+@using Ramcor.Data.Components
+@inherits GenericForm<RamcorCode>
+
+<EditForm EditContext="@_editContext"
+          OnValidSubmit="() => OnValidSubmit(TValue)"
+          OnInvalidSubmit="() => OnInvalidSubmit(BackupValue)">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>    
+    <InputText class="text-input" @bind-Value="@TValue.CodeWord" placeholder="Kód:" />
+</EditForm>
+
+@code {
+    protected override void OnValidSubmit(RamcorCode code)
+    {
+        BackupValue = new RamcorCode{ CodeWord = code.CodeWord };
+        InvokeValueChangedCallback(code);
+    }
+
+    protected override void OnInvalidSubmit(RamcorCode code)
+    {
+        TValue = new RamcorCode{ CodeWord = BackupValue.CodeWord };
+        ResetContext(3);
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _editContext = new(TValue);
+        BackupValue = new RamcorCode { CodeWord = TValue.CodeWord };
+        _editContext.OnFieldChanged += OnFieldChanged;
+
+        return base.OnInitializedAsync();
+    }
+
+    public override RamcorCode ResetValue() => new() { CodeWord = string.Empty };
+}

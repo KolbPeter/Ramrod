@@ -4,15 +4,16 @@ namespace Ramcor.Data.TransCoders
 {
     public static class TransCoderExtensions
     {
-        public static Task<IEnumerable<char>> EncodeToChars(this RamcorCode code, string text) =>
-            Task.Run(() => text.Select(x => char.ToUpper(x).EncodeChar(code.CodeWord.ToUpper())));
+        public static Task<string> Encode(this RamcorCode code, string text) =>
+            Task.Run(() => 
+                string
+                    .Concat(text
+                    .Select(x => char.ToUpper(x).EncodeChar(code.CodeWord.ToUpper()))));
 
-        public static Task<IEnumerable<string>> EncodeToPhonetic(this RamcorCode code, string text) =>
+        public static Task<IEnumerable<string>> ToPhonetic(this string text) =>
             Task.Run(() =>
             {
-                return code
-                    .EncodeToChars(text)
-                    .Result
+                return text
                     .Select(x => Enum.GetNames<PhoneticAlphabet>().First(y => y.StartsWith(x)));
             });
 
@@ -21,14 +22,6 @@ namespace Ramcor.Data.TransCoders
                 string
                     .Concat(text
                     .Select(x => x.DecodeChar(code.CodeWord))));
-
-        public static Task<string> DecodeAsPosition(this RamcorCode code, string text) =>
-            Task.Run(() => 
-                string
-                    .Concat(text
-                    .Select((x,i) => i is < 2 or > 4
-                        ? x.DecodeChar(code.CodeWord)
-                        : char.ToUpper(x))));
 
         private static char EncodeChar(this char character, string codeWord)
         {

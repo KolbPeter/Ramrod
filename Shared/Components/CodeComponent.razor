@@ -1,8 +1,6 @@
-﻿@using Ramcor.Data
-@using Ramcor.Data.Models
-@using Ramcor.Data.Validators
+﻿@using Ramcor.Data.Models
 
-@if (RamcorCodeValidators.Validate(Code).IsValid)
+@if (!string.IsNullOrEmpty(Code.CodeWord))
 {
     <div>
         <label>Aktuális kód: </label>
@@ -10,13 +8,13 @@
             <tr>
                 @for (int i = 0; i < 10; i++)
                 {
-                    <td class="good_td">@i</td>
+                    <td>@i</td>
                 }
             </tr>
             <tr>
                 @foreach(var character in Code.CodeWord)
                 {
-                    <td class="good_td">@character</td>
+                    <td>@character</td>
                 }
             </tr>
         </table>

@@ -1,56 +1,62 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
+    --color-1: lightgreen;
+    --color-2: green;
+    --color-background: #001500;
+    --color-background-1: #000000;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #001500;
-    color: darkgreen;
+    background-color: var(--color-background);
+    color: var(--color-1);
+    box-sizing: border-box;
 }
 
-h1:focus {
-    outline: none;
+td {
+    border: 1px solid darkgreen;
+    border-collapse: collapse;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    text-align: center;
+    color: var(--color-2);
+    background-color: var(--color-background-1);
+    font-weight: bolder;
 }
 
-.label-information {
-    padding-right: 1.2rem;
+fieldset {
+    border: solid 3px darkgreen;
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    color: var(--color-1);
+    width: fit-content;
 }
 
-.bad_td {
-    color: blue;
-    font-weight: bold;
+legend {
+    color: var(--color-1);
 }
 
-div {
-    padding: 10px;
+label {
+    font-size: 1.2rem;
 }
 
-div.left {
+.left {
     float: left;
 }
 
-div.right {
-    float: left
+.right {
+    float: left;
 }
 
-a, .btn-link {
-    color: #0071c1;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid red;
+.text-input {
+    font-size: 1.5rem;
+    width: fit-content;
+    background-color: var(--color-background-1);
+    color: var(--color-1);
+    border: none;
+    border-bottom: 1px solid darkgreen;
+    padding: 0.4rem;
+    outline: ;
+    margin-right: 0.5rem;
 }
 
 .validation-message {
