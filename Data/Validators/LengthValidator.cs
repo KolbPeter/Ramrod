@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ramcor.Data.Validators;
+namespace Ramrod.Data.Validators;
 
 public class LengthValidator : ValidationAttribute
 {
-    public override bool IsValid(object value) =>
-        value is string code
-        && code.Length == 10;
+    public override bool IsValid(object value)
+    {
+        return value is string code
+               && code.Length == 10;
+    }
 }

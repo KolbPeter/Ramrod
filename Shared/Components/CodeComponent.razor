@@ -1,18 +1,17 @@
-﻿@using Ramcor.Data.Models
-
+﻿@using Ramrod.Data.Models
 @if (!string.IsNullOrEmpty(Code.CodeWord))
 {
     <div>
         <label>Aktuális kód: </label>
         <table>
             <tr>
-                @for (int i = 0; i < 10; i++)
+                @for (var i = 0; i < 10; i++)
                 {
                     <td>@i</td>
                 }
             </tr>
             <tr>
-                @foreach(var character in Code.CodeWord)
+                @foreach (var character in Code.CodeWord)
                 {
                     <td>@character</td>
                 }
@@ -24,5 +23,5 @@
 @code
 {
     [Parameter]
-    public RamcorCode Code { get; set; }
+    public RamrodCode Code { get; set; }
 }

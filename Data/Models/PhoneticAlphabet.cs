@@ -1,32 +1,31 @@
-﻿namespace Ramcor.Data.Models
+﻿namespace Ramrod.Data.Models;
+
+public enum PhoneticAlphabet
 {
-    public enum PhoneticAlphabet
-    {
-        Alpha,
-        Bravo,
-        Charlie,
-		Delta,
-		Echo,
-		Foxtrot,
-		Golf,
-		Hotel,
-		India,
-		Juliett,
-		Kilo,
-		Lima,
-		Mike,
-		November,
-		Oscar,
-		Papa,
-		Quebec,
-		Romeo,
-		Sierra,
-		Tango,
-		Uniform,
-		Victor,
-		Whiskey,
-		Xray,
-		Yankee,
-		Zulu
-    }
+    Alpha,
+    Bravo,
+    Charlie,
+    Delta,
+    Echo,
+    Foxtrot,
+    Golf,
+    Hotel,
+    India,
+    Juliett,
+    Kilo,
+    Lima,
+    Mike,
+    November,
+    Oscar,
+    Papa,
+    Quebec,
+    Romeo,
+    Sierra,
+    Tango,
+    Uniform,
+    Victor,
+    Whiskey,
+    Xray,
+    Yankee,
+    Zulu
 }

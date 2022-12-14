@@ -1,6 +1,5 @@
-﻿@using Ramcor.Data.Models
-@using Ramcor.Data.TransCoders
-
+﻿@using Ramrod.Data.TransCoders
+@using Ramrod.Data.Models
 @if (Message.IsValid)
 {
     <table>
@@ -14,7 +13,9 @@
         }
     </table>
 }
+
 @code {
+
     [Parameter]
     public Message Message { get; set; }
 
@@ -27,4 +28,5 @@
             .Range(0, charArray.Length)
             .Select(x => (charArray[x], processedArray[x], phoneticArray[x]));
     }
+
 }

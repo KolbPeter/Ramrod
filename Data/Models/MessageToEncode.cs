@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ramcor.Data.Models
+namespace Ramrod.Data.Models;
+
+public record MessageToEncode
 {
-    public record MessageToEncode
-    {
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "A kódolatlan közlemény csak az angol ABC betűit és számokat tartalmazhat!")]
-        public string Message { get; set; }
-    }
+    [RegularExpression(@"^[a-zA-Z0-9]+$",
+        ErrorMessage = "A kódolatlan közlemény csak az angol ABC betűit és számokat tartalmazhat!")]
+    public string Message { get; set; }
 }

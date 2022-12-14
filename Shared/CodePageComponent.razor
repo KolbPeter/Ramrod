@@ -1,41 +1,40 @@
-﻿@using Ramcor.Data.Models
-@using Ramcor.Shared.Components
-@using Ramcor.Shared.Forms
-@using Microsoft.AspNetCore.Components
-@using Ramcor.Data
+﻿@using Ramrod.Data
+@using Ramrod.Data.Models
 @using Blazored.LocalStorage
-@inject RamcorService RamcorService
+@using Ramrod.Shared.Forms
+@using Ramrod.Shared.Components
+@inject RamrodService RamrodService
 @inject ILocalStorageService LocalStorage
 
 <fieldset>
     <legend>Kód</legend>
-    <EditForm Model="@RamcorCode">
-        <CodeForm @bind-Value="@RamcorCode" TValue="@RamcorCode" />
+    <EditForm Model="@RamrodCode">
+        <CodeForm @bind-Value="@RamrodCode" TValue="@RamrodCode"/>
     </EditForm>
-    <CodeComponent Code="@RamcorService.Code"></CodeComponent>
+    <CodeComponent Code="@RamrodService.Code"></CodeComponent>
 </fieldset>
 
 
 @code {
-    private const string CodeWordStorage = "CodeWord";
+        private const string CodeWordStorage = "CodeWord";
 
-    private RamcorCode RamcorCode
+    private RamrodCode RamrodCode
     {
-        get => new (){CodeWord = RamcorService.Code.CodeWord};
+        get => new() { CodeWord = RamrodService.Code.CodeWord };
         set => OnCodeChange(value);
     }
 
-    private void OnCodeChange(RamcorCode newCode)
+    private void OnCodeChange(RamrodCode newCode)
     {
-        RamcorService.Code = newCode;
+        RamrodService.Code = newCode;
         LocalStorage.SetItemAsync(CodeWordStorage, newCode.CodeWord);
         StateHasChanged();
     }
-    
+
     protected override async Task OnParametersSetAsync()
     {
         var previousCodeWord = await LocalStorage.GetItemAsync<string>(CodeWordStorage);
-        OnCodeChange(new RamcorCode { CodeWord = previousCodeWord ?? string.Empty });
+        OnCodeChange(new RamrodCode { CodeWord = previousCodeWord ?? string.Empty });
 
         await base.OnParametersSetAsync();
     }
@@ -43,7 +42,7 @@
     protected override async Task OnInitializedAsync()
     {
         var previousCodeWord = await LocalStorage.GetItemAsync<string>(CodeWordStorage);
-        OnCodeChange(new RamcorCode { CodeWord = previousCodeWord ?? string.Empty });
+        OnCodeChange(new RamrodCode { CodeWord = previousCodeWord ?? string.Empty });
 
         await base.OnInitializedAsync();
     }

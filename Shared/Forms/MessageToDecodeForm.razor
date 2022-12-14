@@ -1,35 +1,39 @@
-﻿@using Ramcor.Data.Models
-@using Ramcor.Data.Components
-@inherits GenericForm<MessageToDecode>
+﻿@using Ramrod.Data.Models
+@inherits Ramrod.Data.Components.GenericForm<Ramrod.Data.Models.MessageToDecode>
 
 <EditForm EditContext="@_editContext"
           OnValidSubmit="() => OnValidSubmit(TValue)"
           OnInvalidSubmit="() => OnInvalidSubmit(BackupValue)">
     <DataAnnotationsValidator/>
-    <ValidationSummary/>    
-    <InputText class="text-input" @bind-Value="@TValue.Message" placeholder="Közlemény:" />
+    <ValidationSummary/>
+    <InputText class="text-input" @bind-Value="@TValue.Message" placeholder="Közlemény:"/>
 </EditForm>
 
 @code {
+
     protected override void OnValidSubmit(MessageToDecode message)
     {
-        BackupValue = new MessageToDecode{ Message = message.Message};
+        BackupValue = new MessageToDecode { Message = message.Message };
         InvokeValueChangedCallback(message);
     }
 
     protected override void OnInvalidSubmit(MessageToDecode message)
     {
-        TValue = new MessageToDecode{ Message = BackupValue.Message };
+        TValue = new MessageToDecode { Message = BackupValue.Message };
         ResetContext(5);
     }
 
     protected override Task OnInitializedAsync()
     {
-        _editContext = new(TValue);
-        BackupValue = new MessageToDecode{ Message = TValue.Message };
+        _editContext = new EditContext(TValue);
+        BackupValue = new MessageToDecode { Message = TValue.Message };
 
         return base.OnInitializedAsync();
     }
 
-    public override MessageToDecode ResetValue() => new() { Message = string.Empty };
+    public override MessageToDecode ResetValue()
+    {
+        return new() { Message = string.Empty };
+    }
+
 }

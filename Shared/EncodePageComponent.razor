@@ -1,14 +1,12 @@
-﻿@using Ramcor.Data.Models
-@using Ramcor.Shared.Components
-@using Ramcor.Shared.Forms
-@using Microsoft.AspNetCore.Components
-@using Ramcor.Data
-@inject RamcorService RamcorService
+﻿@using Ramrod.Data
+@using Ramrod.Data.Models
+@using Ramrod.Shared.Forms
+@inject RamrodService RamrodService
 
 <fieldset>
     <legend>Dekódolás</legend>
     <EditForm Model="@MessageToDecode">
-        <MessageToDecodeForm @bind-Value="@MessageToDecode" TValue="@MessageToDecode" />
+        <MessageToDecodeForm @bind-Value="@MessageToDecode" TValue="@MessageToDecode"/>
     </EditForm>
 
     @if (NewDecodedMessage != null && NewDecodedMessage.IsValid)
@@ -16,30 +14,32 @@
         <fieldset>
             <legend>Dekódolt üzenet</legend>
             <label>Közlemény: @NewDecodedMessage.Text</label>
-            <br />
+            <br/>
             <label>Dekódolt közlemény: @NewDecodedMessage.ProcessedText</label>
-            <br />
+            <br/>
             <label>Használt kódszó: @NewDecodedMessage.Codeword</label>
-            <br />
+            <br/>
         </fieldset>
     }
 </fieldset>
 
 @code {
     private MessageToDecode _messageToDecode;
+
     private MessageToDecode MessageToDecode
     {
         get => _messageToDecode;
         set => OnMessageToDecodeChanged(value);
     }
+
     private Message NewDecodedMessage { get; set; }
 
     private async void OnMessageToDecodeChanged(MessageToDecode message)
     {
-        var decodedMessage = await RamcorService.Decode(message.Message);
-        NewDecodedMessage = new Message()
+        var decodedMessage = await RamrodService.Decode(message.Message);
+        NewDecodedMessage = new Message
         {
-            Codeword = RamcorService.Code.CodeWord,
+            Codeword = RamrodService.Code.CodeWord,
             Text = message.Message,
             ProcessedText = decodedMessage
         };
@@ -62,4 +62,5 @@
 
         await base.OnInitializedAsync();
     }
+
 }

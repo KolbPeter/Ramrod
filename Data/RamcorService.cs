@@ -1,19 +1,24 @@
-﻿using Ramcor.Data.Models;
-using Ramcor.Data.TransCoders;
+﻿using Ramrod.Data.Models;
+using Ramrod.Data.TransCoders;
 
-namespace Ramcor.Data
+namespace Ramrod.Data;
+
+public class RamrodService
 {
-    public class RamcorService
+    public RamrodService()
     {
-        public RamcorCode Code { get; set; }
+        Code = new RamrodCode();
+    }
 
-        public Task<string> Encode(string text) => Code.Encode(text);
+    public RamrodCode Code { get; set; }
 
-        public Task<string> Decode(string text) => Code.Decode(text);
+    public Task<string> Encode(string text)
+    {
+        return Code.Encode(text);
+    }
 
-        public RamcorService()
-        {
-            Code = new RamcorCode();
-        }
+    public Task<string> Decode(string text)
+    {
+        return Code.Decode(text);
     }
 }

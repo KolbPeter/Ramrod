@@ -1,36 +1,40 @@
-﻿@using Ramcor.Data.Models
-@using Ramcor.Data.Components
-@inherits GenericForm<RamcorCode>
+﻿@using Ramrod.Data.Models
+@inherits Ramrod.Data.Components.GenericForm<Ramrod.Data.Models.RamrodCode>
 
 <EditForm EditContext="@_editContext"
           OnValidSubmit="() => OnValidSubmit(TValue)"
           OnInvalidSubmit="() => OnInvalidSubmit(BackupValue)">
     <DataAnnotationsValidator/>
-    <ValidationSummary/>    
-    <InputText class="text-input" @bind-Value="@TValue.CodeWord" placeholder="Kód:" />
+    <ValidationSummary/>
+    <InputText class="text-input" @bind-Value="@TValue.CodeWord" placeholder="Kód:"/>
 </EditForm>
 
 @code {
-    protected override void OnValidSubmit(RamcorCode code)
+
+    protected override void OnValidSubmit(RamrodCode code)
     {
-        BackupValue = new RamcorCode{ CodeWord = code.CodeWord };
+        BackupValue = new RamrodCode { CodeWord = code.CodeWord };
         InvokeValueChangedCallback(code);
     }
 
-    protected override void OnInvalidSubmit(RamcorCode code)
+    protected override void OnInvalidSubmit(RamrodCode code)
     {
-        TValue = new RamcorCode{ CodeWord = BackupValue.CodeWord };
+        TValue = new RamrodCode { CodeWord = BackupValue.CodeWord };
         ResetContext(3);
     }
 
     protected override Task OnInitializedAsync()
     {
-        _editContext = new(TValue);
-        BackupValue = new RamcorCode { CodeWord = TValue.CodeWord };
+        _editContext = new EditContext(TValue);
+        BackupValue = new RamrodCode { CodeWord = TValue.CodeWord };
         _editContext.OnFieldChanged += OnFieldChanged;
 
         return base.OnInitializedAsync();
     }
 
-    public override RamcorCode ResetValue() => new() { CodeWord = string.Empty };
+    public override RamrodCode ResetValue()
+    {
+        return new() { CodeWord = string.Empty };
+    }
+
 }
